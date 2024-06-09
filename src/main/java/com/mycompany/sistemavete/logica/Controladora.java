@@ -141,6 +141,14 @@ public void guardarMascota(String nombre, int edad, String email, String dni, St
     public List<Usuario> traerUsuarios() {
        return controlPersis.TraerUsuarios();
     }
+
+    public Cliente buscarClientePorDni(String dni) {
+       return controlPersis.buscarCliente(dni);
+    }
+
+    public void editarCliente(Cliente c) throws Exception {
+       this.controlPersis.editarCliente(c);
+    }
      
      
 }

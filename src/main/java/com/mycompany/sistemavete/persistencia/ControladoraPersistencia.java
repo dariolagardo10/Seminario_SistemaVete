@@ -114,4 +114,8 @@ public class ControladoraPersistencia {
         return usuJpa.findUsuarioEntities();
     }
 
+    public void editarCliente(Cliente cliente) throws Exception {
+       clienteJpa.edit(cliente);
+    }
+
 }
