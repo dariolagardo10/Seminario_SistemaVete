@@ -4,11 +4,15 @@
  */
 package com.mycompany.sistemavete.persistencia;
 
+import com.mycompany.sistemavete.logica.Articulo;
+import com.mycompany.sistemavete.logica.Cita;
 import com.mycompany.sistemavete.logica.Cliente;
+import com.mycompany.sistemavete.logica.HistoriaClinica;
 import com.mycompany.sistemavete.logica.Mascota;
 import com.mycompany.sistemavete.logica.TipoUsuario;
 import com.mycompany.sistemavete.logica.Usuario;
 import com.mycompany.sistemavete.persistencia.exceptions.NonexistentEntityException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +31,11 @@ public class ControladoraPersistencia {
     MascotaJpaController mascoJpa = new MascotaJpaController();
     TipoUsuarioJpaController tipoJpa = new TipoUsuarioJpaController();
     UsuarioJpaController usuJpa = new UsuarioJpaController();
-
+    CitaJpaController citaJpa = new CitaJpaController();
+    HistoriaClinicaJpaController HistoriaCJpa = new HistoriaClinicaJpaController();
+    InventarioJpaController InventarioCJpa = new InventarioJpaController();
+    ArticuloJpaController articuloJpa = new ArticuloJpaController();
+    
     public void guardar(Cliente cliente) {
         clienteJpa.create(cliente);
     }
@@ -118,4 +126,52 @@ public class ControladoraPersistencia {
        clienteJpa.edit(cliente);
     }
 
+    public Mascota traerMascota(int id) {
+        return mascoJpa.findMascota(id);
+    }
+
+    public void crearCitas(Cita c) {
+       this.citaJpa.create(c);
+      
+    }
+
+    public void crearHistC(HistoriaClinica h) {
+        this.HistoriaCJpa.create(h);
+    }
+
+    public void crearArticulo(Articulo a) {
+        this.articuloJpa.create(a);
+    }
+
+    public List<Articulo> traerArticulos() {
+        return this.articuloJpa.findArticuloEntities();
+    }
+
+    public Usuario buscarUsuarioxId(int seleccionado) {
+        return this.usuJpa.findUsuario(seleccionado);
+    }
+
+    public Articulo traerArticuloxId(int seleccionado) {
+        return this.articuloJpa.findArticulo(seleccionado);
+    }
+
+    public void editarArticulo(Articulo a) {
+        try {
+            this.articuloJpa.edit(a);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+
+    public void eliminarArt(Articulo u) {
+        try {
+            this.articuloJpa.destroy(u.getId());
+        } catch (NonexistentEntityException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+
+    public Articulo traerArticuloxNom(String text) {
+        return this.articuloJpa.findArticuloByName(text);
+    }
 }

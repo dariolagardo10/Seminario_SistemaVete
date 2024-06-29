@@ -16,6 +16,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,6 +58,7 @@ public class ClienteJpaController implements Serializable {
             em.getTransaction().begin();
             cliente = em.merge(cliente);
             em.getTransaction().commit();
+            JOptionPane.showMessageDialog(null, "Cliente editado");
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -82,6 +84,7 @@ public class ClienteJpaController implements Serializable {
             try {
                 cliente = em.getReference(Cliente.class, id);
                 cliente.getId_cliente();
+                 JOptionPane.showMessageDialog(null, "Cliente eliminado");
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The cliente with id " + id + " no longer exists.", enfe);
             }

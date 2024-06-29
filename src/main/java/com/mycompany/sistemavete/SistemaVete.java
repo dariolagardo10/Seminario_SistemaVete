@@ -24,11 +24,14 @@ public class SistemaVete {
     private Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
-        SistemaVete sistema = new SistemaVete();
-        sistema.ejecutar();
+        //SistemaVete sistema = new SistemaVete();
+       // sistema.ejecutar();
+       FrmPrincipal frm = new FrmPrincipal();
+       frm.setVisible(true);
+       
     }
 
-    public void ejecutar() throws Exception {
+  /*  public void ejecutar() throws Exception {
         boolean exit = false;
 
         while (!exit) {
@@ -469,4 +472,5 @@ public class SistemaVete {
             }
         }
     }
+*/
 }

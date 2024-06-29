@@ -4,8 +4,10 @@ package com.mycompany.sistemavete.logica;
 import com.mycompany.sistemavete.persistencia.ControladoraPersistencia;
 import com.mycompany.sistemavete.persistencia.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -14,15 +16,41 @@ import javax.swing.JOptionPane;
 public class Controladora {
    
     ControladoraPersistencia controlPersis = new ControladoraPersistencia();
-   
     
-    public static ArrayList<Cliente> listaCliente = new ArrayList<>();
-    public static ArrayList<Mascota> listaMascota = new ArrayList<>();
-   
-   
-   
+     public void crearArt(String nom, Double p) {
+        Articulo a = new Articulo();
+        a.setNombre(nom);
+        a.setPrecioActual(p);
+        
+        this.controlPersis.crearArticulo(a);
+        
+    }
 
-   
+    public List<Articulo> listaArticulo() {
+        return this.controlPersis.traerArticulos();
+    }
+
+    public Usuario buscarUsuxId(int seleccionado) {
+        return this.controlPersis.buscarUsuarioxId(seleccionado);
+    }
+
+    public Articulo buscarArtxId(int seleccionado) {
+        return this.controlPersis.traerArticuloxId(seleccionado);
+    }
+
+    public void editarArt(Articulo a) {
+        this.controlPersis.editarArticulo(a);
+    }
+
+    public void eliminarArt(Articulo u) {
+        this.controlPersis.eliminarArt(u);
+    }
+
+    public Articulo buscarArtxNom(String text) {
+        return this.controlPersis.traerArticuloxNom(text);
+    }
+
+ 
      public Cliente obtenerClientePorDni(String dni){
         Cliente cliente=controlPersis.buscarCliente(dni);
         return cliente;
@@ -31,7 +59,6 @@ public class Controladora {
      public  List<Cliente>listaClientes(){
      return controlPersis.traerClientes();
      }
-     
      
      //Mascota
       public  List<Mascota>listaMascotasxNom(String nombre){
@@ -149,6 +176,36 @@ public void guardarMascota(String nombre, int edad, String email, String dni, St
     public void editarCliente(Cliente c) throws Exception {
        this.controlPersis.editarCliente(c);
     }
-     
-     
+
+   
+
+    public Mascota buscarMascotaxId(int id) {
+       return controlPersis.traerMascota(id);
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void crearCita(Mascota m, Date fechaSeleccionada) {
+       Cita c = new Cita();
+       c.setFechaCita(fechaSeleccionada);
+       c.setMascota(m);
+       this.controlPersis.crearCitas(c);
+    }
+
+    public void crearHistoriaClinica(String text, String texto, Mascota m, Date fechaSeleccionada) {
+        HistoriaClinica h = new HistoriaClinica();
+        h.setDescripcion(texto);
+        h.setFecha(fechaSeleccionada);
+        h.setMascota(m);
+        h.setMotivo(text);
+        
+        this.controlPersis.crearHistC(h);
+    }
+
+   
 }
+    
+        
+    
+
+   
+

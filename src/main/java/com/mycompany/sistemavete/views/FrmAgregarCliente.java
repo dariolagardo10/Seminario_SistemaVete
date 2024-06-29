@@ -23,9 +23,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmAgregarCliente extends JFrame {
     Controladora ctrl = new Controladora();
-    /**
-     * Creates new form FrmAgregarCliente
-     */
+    String bandera="";
     public FrmAgregarCliente() {
         initComponents();
         setLocationRelativeTo(this); 
@@ -66,6 +64,9 @@ public class FrmAgregarCliente extends JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -247,6 +248,17 @@ public class FrmAgregarCliente extends JFrame {
             }
         });
 
+        jButton6.setText("Editar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setText("Nuevo");
+
+        jButton8.setText("Cancelar");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -256,11 +268,17 @@ public class FrmAgregarCliente extends JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton5)
+                            .addComponent(jButton7)
+                            .addGap(18, 18, 18)
+                            .addComponent(jButton6)
                             .addGap(18, 18, 18)
                             .addComponent(jButton4)
-                            .addGap(32, 32, 32)
-                            .addComponent(jButton3))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton8)
+                            .addGap(4, 4, 4)
+                            .addComponent(jButton3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jButton5))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -280,7 +298,10 @@ public class FrmAgregarCliente extends JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton4)
-                    .addComponent(jButton5))
+                    .addComponent(jButton5)
+                    .addComponent(jButton6)
+                    .addComponent(jButton7)
+                    .addComponent(jButton8))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -311,20 +332,81 @@ txtnombrecli4.setText("");
                 txtnacionalidadcli4.setText("");
 }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       if (!txtdnicli4.getText().isEmpty() && !txtedadcli4.getText().isEmpty()
+     if(this.bandera.equals("nuevo")){
+        if (!txtdnicli4.getText().isEmpty() && !txtedadcli4.getText().isEmpty()
                 && !txtnombrecli4.getText().isEmpty() && !txtemcliente4.getText().isEmpty()){            
-           
+           Cliente c=this.ctrl.buscarClientePorDni(txtdnicli4.getText());
+           if(c!=null){
+           JOptionPane.showMessageDialog(null, "Cliente existente");
+           }else{
                 String nombre = txtnombrecli4.getText();
                 int edad =Integer.parseInt(txtedadcli4.getText());
                 String dni =txtdnicli4.getText();
                 String email=txtemcliente4.getText();
                 String localidad=txtlocalidadcli4.getText();
                 String nacionalidad=txtnacionalidadcli4.getText();
-                //Cliente cli = new Cliente(1,nombre,edad,email,dni,localidad,nacionalidad);
-               
                 ctrl.guardarCliente(nombre,edad,email,dni,localidad,nacionalidad);
                 JOptionPane.showMessageDialog(null, "Se creo un cliente Correctamente");
+           }
        }
+     }else{
+     if(this.bandera.equals("editar")){
+      if(tblclientes.getSelectedRow() > -1 && tblclientes.getSelectedRowCount()== 1){
+            String dni1 =(String)tblclientes.getValueAt(tblclientes.getSelectedRow(),2);
+            Cliente c =  this.ctrl.buscarClientePorDni(dni1);
+            if(c!=null){
+             if (!txtdnicli4.getText().isEmpty() && !txtedadcli4.getText().isEmpty()
+                && !txtnombrecli4.getText().isEmpty() && !txtemcliente4.getText().isEmpty()){  
+                 String nombre = txtnombrecli4.getText();
+                int edad =Integer.parseInt(txtedadcli4.getText());
+                String dni =txtdnicli4.getText();
+                String email=txtemcliente4.getText();
+                String localidad=txtlocalidadcli4.getText();
+                String nacionalidad=txtnacionalidadcli4.getText();
+                 c.setDni(dni);
+                 c.setEdad(edad);
+                 c.setEmail(email);
+                 c.setLocalidad(localidad);
+                 c.setNacionalidad(nacionalidad);
+                 c.setNombre(nombre);
+                 try {
+                     this.ctrl.editarCliente(c);
+                 } catch (Exception ex) {
+                     
+                 }
+             }
+            }
+      }
+     }else{
+     if(this.bandera.equals("eliminar")){
+         int id = 0;
+         if(tblclientes.getSelectedRow() > -1 && tblclientes.getSelectedRowCount()== 1){
+            String dni=(String) tblclientes.getValueAt(tblclientes.getSelectedRow(),3);
+            Cliente clienteseleccionado =  this.ctrl.obtenerClientePorDni(dni);
+            List<Mascota>m=this.ctrl.listaMascotas(clienteseleccionado.getId_cliente());
+           
+            if(m!=null){
+                try {
+                    ctrl.eliminarListaMascPorC(clienteseleccionado.getId_cliente());
+                } catch (NonexistentEntityException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+            }
+            if(clienteseleccionado!=null){
+               id=clienteseleccionado.getId_cliente();
+                try {
+                   ctrl.eliminarClientePorId(clienteseleccionado.getId_cliente());
+                    
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null,ex.getMessage());
+                }
+            }
+        }else{
+             JOptionPane.showMessageDialog(null,"Debe buscar un cliente a eliminar y seleccionar");
+         }
+     }
+     }
+     }
     }//GEN-LAST:event_jButton3ActionPerformed
  public void CargarTabla(Cliente cliente){
     DefaultTableModel tabla=new DefaultTableModel();
@@ -381,37 +463,18 @@ txtnombrecli4.setText("");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        int id = 0;
-         if(tblclientes.getSelectedRow() > -1 && tblclientes.getSelectedRowCount()== 1){
-            String dni=(String) tblclientes.getValueAt(tblclientes.getSelectedRow(),3);
-            Cliente clienteseleccionado =  this.ctrl.obtenerClientePorDni(dni);
-            List<Mascota>m=this.ctrl.listaMascotas(clienteseleccionado.getId_cliente());
-           
-            if(m!=null){
-                try {
-                    ctrl.eliminarListaMascPorC(clienteseleccionado.getId_cliente());
-                } catch (NonexistentEntityException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
-                }
-            }
-            if(clienteseleccionado!=null){
-               id=clienteseleccionado.getId_cliente();
-                try {
-                   ctrl.eliminarClientePorId(clienteseleccionado.getId_cliente());
-                    
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null,ex.getMessage());
-                }
-            }
-        }else{
-             JOptionPane.showMessageDialog(null,"Debe buscar un cliente a eliminar y seleccionar");
-         }
+        this.bandera="eliminar";
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
          FrmPrincipal frm=new FrmPrincipal();
          frm.setVisible(true);
+         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+       this.bandera="editar";
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -424,6 +487,9 @@ txtnombrecli4.setText("");
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel35;

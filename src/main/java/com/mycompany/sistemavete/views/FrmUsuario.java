@@ -7,7 +7,7 @@ package com.mycompany.sistemavete.views;
 import com.mycompany.sistemavete.logica.Controladora;
 import com.mycompany.sistemavete.logica.TipoUsuario;
 import com.mycompany.sistemavete.logica.Usuario;
-import static com.mycompany.sistemavete.logica.Usuario_.apellido;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,20 +19,19 @@ import javax.swing.table.DefaultTableModel;
  * @author Dario
  */
 public class FrmUsuario extends javax.swing.JFrame {
-    Controladora ctrl =new Controladora();
+    Controladora ctrl = new Controladora();
     /**
      * Creates new form FrmUsuario
      */
-    String bandera="";
+    String bandera = "";
+
     public FrmUsuario() {
         initComponents();
-        setLocationRelativeTo(this); 
-         this.cargarCombo();
+        setLocationRelativeTo(this);
+        this.cargarCombo();
     }
 
-
-
-  public void cargarCombo() {
+    public void cargarCombo() {
         List<TipoUsuario> tipo = ctrl.traerTipo();
         cmbNivel.removeAllItems(); // Clear existing items if any
         for (TipoUsuario tipoUsuario : tipo) {
@@ -96,6 +95,11 @@ public class FrmUsuario extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblusuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblusuariosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblusuarios);
 
         jLabel2.setText("Datos de Usuario :");
@@ -189,6 +193,11 @@ public class FrmUsuario extends javax.swing.JFrame {
         jButton6.setText("Cancelar");
 
         jButton7.setText("Salir");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -208,21 +217,21 @@ public class FrmUsuario extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton6)
-                                .addGap(15, 15, 15)
-                                .addComponent(jButton3)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton7)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel2)
+                        .addGap(0, 539, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton7)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -265,61 +274,80 @@ public class FrmUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-this.bandera="nuevo";    
+        this.bandera = "nuevo";
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        
-                String nombre =txtnom.getText();
-                String nombreusu=txtnomusu.getText();
-                String contra=txtcontra.getText();
-                String apellido=txtape.getText();
-                String tipo=(String) cmbNivel.getSelectedItem();
-                TipoUsuario tipousu;
-                tipousu=ctrl.buscarTipo(tipo);
-        
-        if(this.bandera.equals("nuevo")){
+        String nombre = txtnom.getText();
+        String nombreusu = txtnomusu.getText();
+        String contra = txtcontra.getText();
+        String apellido = txtape.getText();
+        String tipo = (String) cmbNivel.getSelectedItem();
+        TipoUsuario tipousu;
+        tipousu = ctrl.buscarTipo(tipo);
 
- if (!txtnom.getText().isEmpty()&&!txtcontra.getText().isEmpty()&&!txtnomusu.getText().isEmpty()&&!txtape.getText().isEmpty()){            
-           
-                
-               
+        if (this.bandera.equals("nuevo")) {
+
+            if (!txtnom.getText().isEmpty() && !txtcontra.getText().isEmpty() && !txtnomusu.getText().isEmpty() && !txtape.getText().isEmpty()) {
+
                 ctrl.guardarUsu(nombre, contra, apellido, tipo, tipousu);
                 JOptionPane.showMessageDialog(null, "Se creo un Tipo Usuario");
-       }  else{
- JOptionPane.showMessageDialog(null, "No puede haber campos vacios");
- }
+            } else {
+                JOptionPane.showMessageDialog(null, "No puede haber campos vacios");
+            }
         }
- 
- if(this.bandera.equals("")){
- JOptionPane.showMessageDialog(null,"debe seleccionar boton : nuevo,editar o eliminar");
- }
- if(this.bandera.equals("editar")){
- if(!txtnomusu.getText().isEmpty()){
-      Usuario u=ctrl.buscarUsu(txtnomusu.getText());
-      u.setApellido(apellido);
-      u.setContrasena(contra);
-      u.setNombre(nombre);
-      u.setTipoDeUsuario(tipousu);
-      u.setUsuario(tipo);
-     try {
-         ctrl.editarUsu(u);
-     } catch (Exception ex) {
-         Logger.getLogger(FrmUsuario.class.getName()).log(Level.SEVERE, null, ex);
-     }
- }
- 
- 
-      
+
+        if (this.bandera.equals("")) {
+            JOptionPane.showMessageDialog(null, "debe seleccionar boton : nuevo,editar o eliminar");
+        }
+        if (this.bandera.equals("editar")) {
+
+            if (tblusuarios.getSelectedRow() > -1 && tblusuarios.getSelectedRowCount() == 1) {
+                int seleccionado = (int) tblusuarios.getValueAt(tblusuarios.getSelectedRow(), 0);
+                Usuario u = ctrl.buscarUsuxId(seleccionado);
+
+                u.setApellido(apellido);
+                u.setContrasena(contra);
+                u.setNombre(nombre);
+                u.setTipoDeUsuario(tipousu);
+                u.setUsuario(tipo);
+
+                try {
+                    ctrl.editarUsu(u);
+                } catch (Exception ex) {
+                    Logger.getLogger(FrmUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            /*if (!txtnomusu.getText().isEmpty()) {
+                Usuario u = ctrl.buscarUsu(txtnomusu.getText());
+                u.setApellido(apellido);
+                u.setContrasena(contra);
+                u.setNombre(nombre);
+                u.setTipoDeUsuario(tipousu);
+                u.setUsuario(tipo);
+                try {
+                    ctrl.editarUsu(u);
+                } catch (Exception ex) {
+                    Logger.getLogger(FrmUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }  */
 
 }     
-     
-      
+          
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
            bandera="editar";
+           if(tblusuarios.getSelectedRow() > -1 && tblusuarios.getSelectedRowCount()== 1){
+            int seleccionado=(int)tblusuarios.getValueAt(tblusuarios.getSelectedRow(),0);
+            Usuario u=ctrl.buscarUsuxId(seleccionado);
+            
+                txtape.setText(u.getApellido());
+                txtnom.setText(u.getNombre());
+                txtnomusu.setText(u.getUsuario());
+                txtcontra.setText(u.getContrasena());
+           }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -327,8 +355,14 @@ this.bandera="nuevo";
         this.CargarT(u);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-      private void tblusuariosMouseClicked(java.awt.event.MouseEvent evt) {                                         
-         Usuario u=ctrl.buscarUsu(txtbusq.getText());
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        FrmPrincipal frm=new FrmPrincipal();
+        frm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void tblusuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblusuariosMouseClicked
+        Usuario u=ctrl.buscarUsu(txtbusq.getText());
           
        
          if(tblusuarios.getSelectedRow() > -1 && tblusuarios.getSelectedRowCount()== 1){
@@ -339,10 +373,13 @@ this.bandera="nuevo";
              txtnomusu.setText(u.getUsuario());
              txtcontra.setText(u.getContrasena());
              txtape.setText(u.getApellido());
-          
             }
         }
-    }  
+    }//GEN-LAST:event_tblusuariosMouseClicked
+
+     
+        
+    
       
     public void CargarT(Usuario u){
     DefaultTableModel tabla=new DefaultTableModel();
