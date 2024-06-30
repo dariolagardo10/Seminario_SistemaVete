@@ -10,6 +10,8 @@ import com.mycompany.sistemavete.logica.Mascota;
 import com.mycompany.sistemavete.persistencia.exceptions.NonexistentEntityException;
 import java.awt.HeadlessException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,8 +23,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmAgregarMascota extends javax.swing.JFrame {
     Controladora ctrl = new Controladora();
+    String bandera;
     public FrmAgregarMascota() {
-        
+   
         initComponents();
         setLocationRelativeTo(this); 
     }
@@ -60,13 +63,15 @@ public class FrmAgregarMascota extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel1.setText("Buscar Mascota por Dni Cliente :");
+
+        txtbuscarM.setFont(new java.awt.Font("Albertus Extra Bold", 0, 12)); // NOI18N
 
         jButton1.setText("Buscar Mascota");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -82,6 +87,7 @@ public class FrmAgregarMascota extends javax.swing.JFrame {
             }
         });
 
+        tblmascotas.setFont(new java.awt.Font("Albertus Extra Bold", 0, 12)); // NOI18N
         tblmascotas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -100,20 +106,18 @@ public class FrmAgregarMascota extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(txtbuscarM, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton1)
                         .addGap(18, 18, 18)
                         .addComponent(jButton2))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 653, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 653, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,9 +128,9 @@ public class FrmAgregarMascota extends javax.swing.JFrame {
                     .addComponent(txtbuscarM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addGap(19, 19, 19))
         );
 
         jLabel2.setText("Datos De Mascota");
@@ -137,9 +141,17 @@ public class FrmAgregarMascota extends javax.swing.JFrame {
 
         jLabel35.setText("Raza :");
 
+        txtDniC.setFont(new java.awt.Font("Albertus Extra Bold", 0, 12)); // NOI18N
+
         jLabel36.setText("Nombre Mascota :");
 
+        txtrazaM.setFont(new java.awt.Font("Albertus Extra Bold", 0, 12)); // NOI18N
+
         jLabel38.setText("Edad Mascota :");
+
+        txtnombreM.setFont(new java.awt.Font("Albertus Extra Bold", 0, 12)); // NOI18N
+
+        txtEdadM.setFont(new java.awt.Font("Albertus Extra Bold", 0, 12)); // NOI18N
 
         jLabel39.setText("Dni Cliente :");
 
@@ -166,7 +178,7 @@ public class FrmAgregarMascota extends javax.swing.JFrame {
                         .addComponent(jLabel38)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtEdadM, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(211, Short.MAX_VALUE))
         );
         txtemailcli4Layout.setVerticalGroup(
             txtemailcli4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,54 +237,69 @@ public class FrmAgregarMascota extends javax.swing.JFrame {
         });
 
         jButton6.setText("Editar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("Nuevo");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
-        jButton8.setText("Cancelar");
+        jTextField1.setFont(new java.awt.Font("Antique Olive", 1, 12)); // NOI18N
+        jTextField1.setText("Gestion Mascota");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton7)
-                            .addGap(18, 18, 18)
-                            .addComponent(jButton6)
-                            .addGap(18, 18, 18)
-                            .addComponent(jButton5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton8)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton3)
-                            .addGap(18, 18, 18)
-                            .addComponent(jButton4))
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel2))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(253, 253, 253)
+                        .addComponent(jButton7)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton4))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6)
                     .addComponent(jButton7)
-                    .addComponent(jButton8))
-                .addContainerGap(27, Short.MAX_VALUE))
+                    .addComponent(jButton6)
+                    .addComponent(jButton5)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -302,33 +329,87 @@ txtnombreM.setText("");
                // txtnacionalidadcli4.setText("");
 }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-   Cliente c;
-        if (!txtrazaM.getText().isEmpty()
-                && !txtnombreM.getText().isEmpty() && !txtEdadM.getText().isEmpty()){            
-            try{
-              
-                String nombre = txtnombreM.getText();
-                String raza =txtrazaM.getText();
-                int edad =Integer.parseInt(txtEdadM.getText());
-                String dni =txtDniC.getText();
-                c=ctrl.obtenerClientePorDni(dni);
-                
-                
-                if (c!=null){
-                      Mascota mascota =new Mascota(1, nombre, raza,edad, c);
-                      ctrl.agregarMascota(mascota);
-                      limpiar();
-                      JOptionPane.showMessageDialog(null, "MascotaAgregado");
-                    
-                }else{
-                    JOptionPane.showMessageDialog(null, "Noexiste un Cliente con ese Dni");
+   
+         if (!txtrazaM.getText().isEmpty() && !txtnombreM.getText().isEmpty() && !txtEdadM.getText().isEmpty()) {
+        try {
+            String nombre = txtnombreM.getText();
+            String raza = txtrazaM.getText();
+            int edad = Integer.parseInt(txtEdadM.getText());
+            String dni = txtDniC.getText();
+            Cliente c = ctrl.obtenerClientePorDni(dni);
+
+            if (c != null) {
+                switch (bandera) {
+                    case "nuevo":
+                        // Agregar nueva mascota
+                        Mascota nuevaMascota = new Mascota(1, nombre, raza, edad, c);
+                        ctrl.agregarMascota(nuevaMascota);
+                        JOptionPane.showMessageDialog(null, "Mascota Agregada");
+                        break;
+                    case "editar":
+                        // Verificar si hay una mascota seleccionada en la tabla
+                        int filaSeleccionada = tblmascotas.getSelectedRow();
+                        if (filaSeleccionada != -1) {
+                            // Obtener el ID de la mascota seleccionada desde la tabla
+                            int idMascota = (int) tblmascotas.getValueAt(filaSeleccionada, 0);
+
+                            // Obtener la mascota seleccionada desde el controlador
+                            Mascota mascotaSeleccionada = ctrl.buscarMascotaxId(idMascota);
+                            if (mascotaSeleccionada != null) {
+                                // Editar mascota existente
+                                mascotaSeleccionada.setNombre(nombre);
+                                mascotaSeleccionada.setRaza(raza);
+                                mascotaSeleccionada.setEdad(edad);
+                                try {
+                                    ctrl.actualizarMascota(mascotaSeleccionada);
+                                       JOptionPane.showMessageDialog(null, "Mascota Editada");
+                                } catch (Exception ex) {
+                                  JOptionPane.showMessageDialog(null,"Mascota No Editada");
+                                }
+                             
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Por favor, seleccione una mascota para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        }
+                        break;
+                    case "eliminar":
+                        // Verificar si hay una mascota seleccionada en la tabla
+                        if (tblmascotas.getSelectedRow() > -1 && tblmascotas.getSelectedRowCount() == 1) {
+                            Object value = tblmascotas.getValueAt(tblmascotas.getSelectedRow(), 0);
+                            if (value instanceof Integer) {
+                                int id = (Integer) value;
+                                ctrl.eliminarMascotaPorId(id);
+                                JOptionPane.showMessageDialog(this, "Mascota eliminada.");
+                            } else if (value instanceof String) {
+                                try {
+                                    int id = Integer.parseInt((String) value);
+                                    ctrl.eliminarMascotaPorId(id);
+                                    JOptionPane.showMessageDialog(this, "Mascota eliminada.");
+                                } catch (NumberFormatException e) {
+                                    JOptionPane.showMessageDialog(this, "El ID no es un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(this, "El tipo de dato en la celda no es válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Por favor, seleccione una mascota para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                        }
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(null, "Operación no válida");
+                        break;
                 }
-            }catch(NumberFormatException | HeadlessException ex){
-                JOptionPane.showMessageDialog(null, "Error " + ex.getMessage());
+                limpiar();
+               
+            } else {
+                JOptionPane.showMessageDialog(null, "No existe un Cliente con ese Dni");
             }
-        }else{
-            JOptionPane.showMessageDialog(null, "Faltan Datos");
+        } catch (NumberFormatException | HeadlessException ex) {
+            JOptionPane.showMessageDialog(null, "Error " + ex.getMessage());
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "Faltan Datos");
+    }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     
@@ -339,15 +420,15 @@ txtnombreM.setText("");
             if (m == null) {
                 JOptionPane.showMessageDialog(null, "Vacio");
             } else {
-                this.CargarT(m);
-                JOptionPane.showMessageDialog(null, "Lista No Vacio");
+               
+               this.CargarT(m);
             }
 
         } else {
             JOptionPane.showMessageDialog(null, "Cliente No existe");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
- 
+
  
  public void CargarT(List<Mascota> mascotas){
     DefaultTableModel tabla=new DefaultTableModel();
@@ -412,6 +493,15 @@ txtnombreM.setText("");
     
     }//GEN-LAST:event_jButton5ActionPerformed
     }
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+       this.bandera="nuevo";
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
+    
+
     /**
      * @param args the command line arguments
      */
@@ -425,7 +515,6 @@ txtnombreM.setText("");
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel35;
@@ -436,6 +525,7 @@ txtnombreM.setText("");
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tblmascotas;
     private javax.swing.JTextField txtDniC;
     private javax.swing.JTextField txtEdadM;

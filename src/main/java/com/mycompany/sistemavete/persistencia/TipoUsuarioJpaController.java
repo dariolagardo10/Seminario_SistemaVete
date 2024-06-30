@@ -17,6 +17,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -58,6 +59,7 @@ public class TipoUsuarioJpaController implements Serializable {
             em.getTransaction().begin();
             tipoUsuario = em.merge(tipoUsuario);
             em.getTransaction().commit();
+            
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {

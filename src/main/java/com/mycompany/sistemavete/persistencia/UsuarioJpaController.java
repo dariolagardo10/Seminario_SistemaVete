@@ -129,7 +129,7 @@ public Usuario findUsuarioByNombre(String nombre) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Usuario> query = em.createQuery("SELECT u"
-                    + " FROM Usuario u WHERE u.nombre = :nombre", Usuario.class);
+                    + " FROM Usuario u WHERE u.usuario = :nombre", Usuario.class);
             query.setParameter("nombre", nombre);
             try {
                 return query.getSingleResult();

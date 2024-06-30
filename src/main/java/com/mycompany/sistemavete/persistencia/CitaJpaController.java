@@ -5,15 +5,21 @@
 package com.mycompany.sistemavete.persistencia;
 
 import com.mycompany.sistemavete.logica.Cita;
+
+import com.mycompany.sistemavete.logica.Mascota;
 import com.mycompany.sistemavete.persistencia.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.swing.JOptionPane;
 
@@ -139,5 +145,48 @@ public class CitaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    Cita buscarCita(Mascota m, Date fechaSeleccionada) {
+        EntityManager em = getEntityManager();
+    try {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Cita> cq = cb.createQuery(Cita.class);
+        Root<Cita> citaRoot = cq.from(Cita.class);
+
+        Predicate predicateMascota = cb.equal(citaRoot.get("mascota"), m);
+        Predicate predicateFecha = cb.equal(citaRoot.get("fechaCita"), fechaSeleccionada);
+
+        cq.where(cb.and(predicateMascota, predicateFecha));
+        Query query = em.createQuery(cq);
+
+        List<Cita> citas = query.getResultList();
+        if (!citas.isEmpty()) {
+            return citas.get(0); // Devuelve la primera cita encontrada (debería ser única)
+        } else {
+            return null; // No se encontró ninguna cita
+        }
+    } finally {
+        em.close();
+    }
+    }
+  public List<Cita> buscarCitaPorMascotas(List<Mascota> mascotas) {
+    EntityManager em = getEntityManager();
+    try {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Cita> cq = cb.createQuery(Cita.class);
+        Root<Cita> citaRoot = cq.from(Cita.class);
+
+        // Utilizamos cb.in para crear la cláusula IN
+        Predicate predicateMascotas = citaRoot.get("mascota").in(mascotas);
+
+        cq.where(predicateMascotas);
+        TypedQuery<Cita> query = em.createQuery(cq);
+
+        return query.getResultList();
+    } finally {
+        em.close();
+    }
+}
+
+   
 }

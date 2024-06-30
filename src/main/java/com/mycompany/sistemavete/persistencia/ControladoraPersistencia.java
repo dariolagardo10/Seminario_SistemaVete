@@ -174,4 +174,63 @@ public class ControladoraPersistencia {
     public Articulo traerArticuloxNom(String text) {
         return this.articuloJpa.findArticuloByName(text);
     }
+
+    public void editarTipoUsu(TipoUsuario tipoUsuario) throws Exception {
+        this.tipoJpa.edit(tipoUsuario);
+    }
+
+    public void eliminarTipo(int id) throws NonexistentEntityException {
+        this.tipoJpa.destroy(id);
+    }
+
+    public void eliminarUsu(int id_Usu) throws NonexistentEntityException {
+        this.usuJpa.destroy(id_Usu);
+    }
+
+    public void editarM(Mascota mascotaSeleccionada) throws Exception {
+        this.mascoJpa.edit(mascotaSeleccionada);
+    }
+
+    public Cita buscarCita(Mascota m, Date fechaSeleccionada) {
+        return this.citaJpa.buscarCita(m,fechaSeleccionada);
+    }
+
+
+    public void eliminarCita1(int id) throws NonexistentEntityException {
+        this.citaJpa.destroy(id);
+    }
+
+    public Cita traerCita(Mascota m, Date fechaSeleccionada) {
+        return this.citaJpa.buscarCita(m, fechaSeleccionada);
+    }
+
+    public void editarCita(Cita citaExistente) throws Exception {
+        this.citaJpa.edit(citaExistente);
+    }
+
+    public List<Cita> traerCita2(List<Mascota> m) {
+        return this.citaJpa.buscarCitaPorMascotas(m);
+    }
+
+    public HistoriaClinica buscarHistoriaClinicaPorMascotaYFecha(Mascota m, Date fecha) {
+        return this.HistoriaCJpa.buscarHistoriaClinicaPorMascotaYFecha(m,fecha);
+    }
+    public void crearHistoriaClinica(HistoriaClinica historia) {
+        this.HistoriaCJpa.crearHistoriaClinica(historia);
+    }
+    public void actualizarHistoriaClinica(HistoriaClinica historia) {
+        this.HistoriaCJpa.actualizarHistoriaClinica(historia);
+    }
+
+    public void eliminarHistoriaClinica(HistoriaClinica historia) {
+        this.HistoriaCJpa.eliminarHistoriaClinica(historia);
+    }
+
+    public List<HistoriaClinica> traerlistaH(String text) {
+        return this.HistoriaCJpa.traerHistoriasClinicasPorNombreMascota(text);
+    }
+
+    public List<HistoriaClinica> traerlistaH2() {
+        return this.HistoriaCJpa.findHistoriaClinicaEntities();
+    }
 }

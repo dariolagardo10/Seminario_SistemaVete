@@ -10,9 +10,7 @@ package com.mycompany.sistemavete.views;
  */
 public class FrmPrincipal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrmPrincipal
-     */
+   
     public FrmPrincipal() {
         initComponents();
         setLocationRelativeTo(this); 

@@ -5,14 +5,18 @@
 package com.mycompany.sistemavete.persistencia;
 
 import com.mycompany.sistemavete.logica.HistoriaClinica;
+import com.mycompany.sistemavete.logica.Mascota;
 import com.mycompany.sistemavete.persistencia.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.swing.JOptionPane;
@@ -136,6 +140,74 @@ public class HistoriaClinicaJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
+            em.close();
+        }
+    }
+
+      public List<HistoriaClinica> traerHistoriasClinicasPorNombreMascota(String nombreMascota) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<HistoriaClinica> query = em.createQuery(
+                "SELECT h FROM HistoriaClinica h WHERE h.mascota.nombre = :nombreMascota", HistoriaClinica.class);
+            query.setParameter("nombreMascota", nombreMascota);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    public HistoriaClinica buscarHistoriaClinicaPorMascotaYFecha(Mascota m, Date fecha) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT h FROM HistoriaClinica h WHERE h.mascota = :mascota AND h.fecha = :fecha");
+            query.setParameter("mascota", m);
+            query.setParameter("fecha", fecha);
+            return (HistoriaClinica) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public void crearHistoriaClinica(HistoriaClinica historia) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(historia);
+            em.getTransaction().commit();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
+    }
+
+    public void actualizarHistoriaClinica(HistoriaClinica historia) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(historia);
+            em.getTransaction().commit();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
+    }
+
+    public void eliminarHistoriaClinica(HistoriaClinica historia) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            historia = em.merge(historia); // Necesario para asegurar que la instancia está gestionada
+            em.remove(historia);
+            em.getTransaction().commit();
+        } finally {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             em.close();
         }
     }

@@ -5,11 +5,11 @@
     <class>com.mycompany.sistemavete.logica.Cliente</class>
     <class>com.mycompany.sistemavete.logica.Mascota</class>
     <class>com.mycompany.sistemavete.logica.TipoUsuario</class>
-    <class>com.mycompany.sistemavete.logica.Usuario</class>
     <class>com.mycompany.sistemavete.logica.Cita</class>
     <class>com.mycompany.sistemavete.logica.HistoriaClinica</class>
     <class>com.mycompany.sistemavete.logica.Inventario</class>
     <class>com.mycompany.sistemavete.logica.Articulo</class>
+    <class>com.mycompany.sistemavete.logica.Usuario</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sistema_veterinario?serverTimezone=UTC"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

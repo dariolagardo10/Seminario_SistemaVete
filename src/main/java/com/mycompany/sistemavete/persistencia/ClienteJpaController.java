@@ -156,10 +156,12 @@ public class ClienteJpaController implements Serializable {
 public Cliente findClienteByDni(String dni) {
     EntityManager em = getEntityManager();
     try {
+        System.out.println("Buscando cliente con DNI: " + dni); // Depuración
         Query query = em.createQuery("SELECT c FROM Cliente c WHERE c.dni = :dni");
         query.setParameter("dni", dni);
         return (Cliente) query.getSingleResult();
     } catch (NoResultException ex) {
+        System.out.println("No se encontró cliente con DNI: " + dni); // Depuración
         return null; // Si no se encuentra ningún cliente con el DNI especificado, devolvemos null
     } finally {
         em.close();

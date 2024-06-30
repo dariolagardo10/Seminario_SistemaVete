@@ -201,6 +201,92 @@ public void guardarMascota(String nombre, int edad, String email, String dni, St
         this.controlPersis.crearHistC(h);
     }
 
+    public TipoUsuario buscarTipoUsuarioPorTipo(String text) {
+        return this.buscarTipo(text);
+    }
+
+    public TipoUsuario buscarTipoUsuarioPorId(int id) {
+        return this.buscarTipoUsuarioPorId(id);
+    }
+
+    public void editarTipoUsuario(TipoUsuario tipoUsuario) throws Exception {
+        this.controlPersis.editarTipoUsu(tipoUsuario);
+    }
+
+    public void eliminarTipoUsuarioPorId(int id) throws NonexistentEntityException {
+        this.controlPersis.eliminarTipo(id);
+    }
+
+    public List<TipoUsuario> listaTiposUsuario() {
+        return this.controlPersis.TraerTipo();
+    }
+
+    public void eliminarUsu(int id_Usu) throws NonexistentEntityException {
+        this.controlPersis.eliminarUsu(id_Usu);
+    }
+
+    public void actualizarMascota(Mascota mascotaSeleccionada) throws Exception {
+       this.controlPersis.editarM(mascotaSeleccionada);
+    }
+
+    public Cita buscarCitaPorMascotaYFecha(Mascota m, Date fechaSeleccionada) {
+        return this.controlPersis.buscarCita(m,fechaSeleccionada);
+    }
+
+    public void eliminarCita(Cita citaExistente) throws NonexistentEntityException {
+        this.controlPersis.eliminarCita1(citaExistente.getId());
+    }
+
+    public Cita existeCitaParaMascotaEnFecha(Mascota m, Date fechaSeleccionada) {
+      return this.controlPersis.traerCita(m,fechaSeleccionada);
+    }
+
+    public void agregarCita(Cita nuevaCita) {
+        this.controlPersis.crearCitas(nuevaCita);
+    }
+
+    public void actualizarCita(Cita citaExistente) throws Exception {
+        this.controlPersis.editarCita(citaExistente);
+    }
+
+    public List<Cita> existeCitaParaMascota(List<Mascota> m) {
+         return this.controlPersis.traerCita2(m);
+    }
+
+   public HistoriaClinica existeHistoriaClinicaParaMascotaEnFecha(Mascota m, Date fecha) {
+    // Implementa la lógica para verificar si ya existe una historia clínica para la mascota en la fecha dada
+    return this.controlPersis.buscarHistoriaClinicaPorMascotaYFecha(m, fecha);
+}
+
+public void agregarHistoriaClinica(HistoriaClinica historia) {
+    // Implementa la lógica para agregar una nueva historia clínica
+    controlPersis.crearHistoriaClinica(historia);
+}
+
+public HistoriaClinica buscarHistoriaClinicaPorMascotaYFecha(Mascota m, Date fecha) {
+    // Implementa la lógica para buscar la historia clínica por mascota y fecha en la base de datos
+    return this.controlPersis.buscarHistoriaClinicaPorMascotaYFecha(m, fecha);
+}
+
+public void actualizarHistoriaClinica(HistoriaClinica historia) {
+    // Implementa la lógica para actualizar la historia clínica en la base de datos
+    controlPersis.actualizarHistoriaClinica(historia);
+}
+
+public void eliminarHistoriaClinica(HistoriaClinica historia) {
+    // Implementa la lógica para eliminar la historia clínica en la base de datos
+    controlPersis.eliminarHistoriaClinica(historia);
+}
+
+    public List<HistoriaClinica> traerListaHistoriaC(String text) {
+        return this.controlPersis.traerlistaH(text);
+    }
+
+    public List<HistoriaClinica> traerListaHistoriaC2() {
+        return this.controlPersis.traerlistaH2();
+    }
+   
+
    
 }
     
