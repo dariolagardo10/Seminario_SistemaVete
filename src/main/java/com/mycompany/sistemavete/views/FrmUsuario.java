@@ -322,68 +322,80 @@ public class FrmUsuario extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-    String nombre = txtnom.getText();
-    String nombreusu = txtnomusu.getText();
-    String contra = txtcontra.getText();
-    String apellido = txtape.getText();
-    String tipo = (String) cmbNivel.getSelectedItem();
-    TipoUsuario tipousu = ctrl.buscarTipo(tipo);
+        // Obtiene los valores de los campos de texto y del combo box
+        String nombre = txtnom.getText();
+        String nombreusu = txtnomusu.getText();
+        String contra = txtcontra.getText();
+        String apellido = txtape.getText();
+        String tipo = (String) cmbNivel.getSelectedItem();
 
-    if (this.bandera.equals("nuevo")) {
-        if (!txtnom.getText().isEmpty() && !txtcontra.getText().isEmpty() && !txtnomusu.getText().isEmpty() && !txtape.getText().isEmpty()&& cmbNivel.getSelectedItem() != null) {
-            ctrl.guardarUsu(nombre, contra, apellido, nombreusu, tipousu);
-            JOptionPane.showMessageDialog(null, "Se creó un nuevo usuario");
-            
-        } else {
-            JOptionPane.showMessageDialog(null, "No puede haber campos vacíos");
-        }
-    } else if (this.bandera.equals("editar")) {
-        if (tblusuarios.getSelectedRow() > -1 && tblusuarios.getSelectedRowCount() == 1) {
-            int seleccionado = (int) tblusuarios.getValueAt(tblusuarios.getSelectedRow(), 0);
-            Usuario u = ctrl.buscarUsuxId(seleccionado);
+// Busca el objeto TipoUsuario correspondiente al tipo seleccionado en el combo box
+        TipoUsuario tipousu = ctrl.buscarTipo(tipo);
 
-            if (u != null) {
-                u.setApellido(apellido);
-                u.setContrasena(contra);
-                u.setNombre(nombre);
-                u.setTipoDeUsuario(tipousu);
-                u.setUsuario(nombreusu);
+// Verifica la acción que se debe realizar según el valor de la bandera
+        if (this.bandera.equals("nuevo")) {
+            // Verifica que no haya campos vacíos antes de guardar un nuevo usuario
+            if (!txtnom.getText().isEmpty() && !txtcontra.getText().isEmpty() && !txtnomusu.getText().isEmpty() && !txtape.getText().isEmpty() && cmbNivel.getSelectedItem() != null) {
+                // Guarda el nuevo usuario en la base de datos
+                ctrl.guardarUsu(nombre, contra, apellido, nombreusu, tipousu);
+                JOptionPane.showMessageDialog(null, "Se creó un nuevo usuario");
+            } else {
+                JOptionPane.showMessageDialog(null, "No puede haber campos vacíos");
+            }
+        } else if (this.bandera.equals("editar")) { // Si la bandera indica que se debe editar un usuario
+            // Verifica que haya una fila seleccionada en la tabla de usuarios
+            if (tblusuarios.getSelectedRow() > -1 && tblusuarios.getSelectedRowCount() == 1) {
+                // Obtiene el ID del usuario seleccionado en la tabla
+                int seleccionado = (int) tblusuarios.getValueAt(tblusuarios.getSelectedRow(), 0);
+                // Busca el usuario por su ID en la base de datos
+                Usuario u = ctrl.buscarUsuxId(seleccionado);
 
-                try {
-                    ctrl.editarUsu(u);
-                    JOptionPane.showMessageDialog(null, "Usuario editado correctamente");
-                } catch (Exception ex) {
-                    Logger.getLogger(FrmUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                if (u != null) { // Si se encontró el usuario
+                    // Actualiza los datos del usuario con los nuevos valores
+                    u.setApellido(apellido);
+                    u.setContrasena(contra);
+                    u.setNombre(nombre);
+                    u.setTipoDeUsuario(tipousu);
+                    u.setUsuario(nombreusu);
+
+                    try {
+                        // Guarda los cambios en la base de datos
+                        ctrl.editarUsu(u);
+                        JOptionPane.showMessageDialog(null, "Usuario editado correctamente");
+                    } catch (Exception ex) {
+                        Logger.getLogger(FrmUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
-        }
-    } else if (this.bandera.equals("eliminar")) {
-        if (tblusuarios.getSelectedRow() > -1 && tblusuarios.getSelectedRowCount() == 1) {
-            int seleccionado = (int) tblusuarios.getValueAt(tblusuarios.getSelectedRow(), 0);
-            Usuario u = ctrl.buscarUsuxId(seleccionado);
+        } else if (this.bandera.equals("eliminar")) { // Si la bandera indica que se debe eliminar un usuario
+            // Verifica que haya una fila seleccionada en la tabla de usuarios
+            if (tblusuarios.getSelectedRow() > -1 && tblusuarios.getSelectedRowCount() == 1) {
+                // Obtiene el ID del usuario seleccionado en la tabla
+                int seleccionado = (int) tblusuarios.getValueAt(tblusuarios.getSelectedRow(), 0);
+                // Busca el usuario por su ID en la base de datos
+                Usuario u = ctrl.buscarUsuxId(seleccionado);
 
-            if (u != null) {
-                try {
-                    ctrl.eliminarUsu(u.getId_Usu());
-                    JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente");
-                } catch (Exception ex) {
-                    Logger.getLogger(FrmUsuario.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                if (u != null) { // Si se encontró el usuario
+                    try {
+                        // Elimina el usuario de la base de datos
+                        ctrl.eliminarUsu(u.getId_Usu());
+                        JOptionPane.showMessageDialog(null, "Usuario eliminado correctamente");
+                    } catch (Exception ex) {
+                        Logger.getLogger(FrmUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(null, ex.getMessage());
+                    }
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un usuario para eliminar");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un usuario para eliminar");
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una acción: nuevo, editar o eliminar");
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Debe seleccionar una acción: nuevo, editar o eliminar");
-    }
 
-    limpiarTablaUsuarios();
-    cargarTablaUsuarios();
-    limpiarCamposUsuario();
-
-    
-          
+// Limpia y actualiza la tabla de usuarios, así como los campos de texto
+        limpiarTablaUsuarios();
+        cargarTablaUsuarios();
+        limpiarCamposUsuario(); 
     }//GEN-LAST:event_jButton3ActionPerformed
 public void limpiarTablaUsuarios() {
     DefaultTableModel modelo = (DefaultTableModel) tblusuarios.getModel();

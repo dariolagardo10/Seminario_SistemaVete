@@ -364,82 +364,82 @@ void limpiar() {
         txtbuscarCli.setText("");
     }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if (this.bandera.equals("nuevo")) {
+        if (this.bandera.equals("nuevo")) { // Verifica si la bandera indica que se debe crear un nuevo cliente
+            // Verifica que los campos obligatorios no estén vacíos
             if (!txtdnicli4.getText().isEmpty() && !txtedadcli4.getText().isEmpty()
-                    && !txtnombrecli4.getText().isEmpty() && !txtemcliente4.getText().isEmpty()) {                
+                    && !txtnombrecli4.getText().isEmpty() && !txtemcliente4.getText().isEmpty()) {
+                // Busca un cliente por su DNI
                 Cliente c = this.ctrl.buscarClientePorDni(txtdnicli4.getText());
-                if (c != null) {
+                if (c != null) { // Si el cliente ya existe, muestra un mensaje
                     JOptionPane.showMessageDialog(null, "Cliente existente");
-                } else {
+                } else { // Si el cliente no existe, crea uno nuevo
                     String nombre = txtnombrecli4.getText();
                     int edad = Integer.parseInt(txtedadcli4.getText());
                     String dni = txtdnicli4.getText();
                     String email = txtemcliente4.getText();
                     String localidad = txtlocalidadcli4.getText();
                     String nacionalidad = txtnacionalidadcli4.getText();
+                    // Guarda el nuevo cliente
                     ctrl.guardarCliente(nombre, edad, email, dni, localidad, nacionalidad);
-                    JOptionPane.showMessageDialog(null, "Se creo un cliente Correctamente");
+                    JOptionPane.showMessageDialog(null, "Se creó un cliente correctamente");
                 }
             }
-        } else {
-            if (this.bandera.equals("editar")) {
-                if (tblclientes.getSelectedRow() > -1 && tblclientes.getSelectedRowCount() == 1) {
-                    String dni1 = (String) tblclientes.getValueAt(tblclientes.getSelectedRow(), 3);
-                    Cliente c = this.ctrl.buscarClientePorDni(dni1);
-                    if (c != null) {
-                        if (!txtdnicli4.getText().isEmpty() && !txtedadcli4.getText().isEmpty()
-                                && !txtnombrecli4.getText().isEmpty() && !txtemcliente4.getText().isEmpty()) {                            
-                            String nombre = txtnombrecli4.getText();
-                            int edad = Integer.parseInt(txtedadcli4.getText());
-                            String dni = txtdnicli4.getText();
-                            String email = txtemcliente4.getText();
-                            String localidad = txtlocalidadcli4.getText();
-                            String nacionalidad = txtnacionalidadcli4.getText();
-                            c.setDni(dni);
-                            c.setEdad(edad);
-                            c.setEmail(email);
-                            c.setLocalidad(localidad);
-                            c.setNacionalidad(nacionalidad);
-                            c.setNombre(nombre);
-                            try {
-                                this.ctrl.editarCliente(c);
-                                
-                            } catch (Exception ex) {
-                                
-                            }
+        } else if (this.bandera.equals("editar")) { // Verifica si la bandera indica que se debe editar un cliente existente
+            if (tblclientes.getSelectedRow() > -1 && tblclientes.getSelectedRowCount() == 1) { // Verifica que haya una fila seleccionada en la tabla
+                String dni1 = (String) tblclientes.getValueAt(tblclientes.getSelectedRow(), 3);
+                Cliente c = this.ctrl.buscarClientePorDni(dni1);
+                if (c != null) { // Si el cliente existe, actualiza sus datos
+                    if (!txtdnicli4.getText().isEmpty() && !txtedadcli4.getText().isEmpty()
+                            && !txtnombrecli4.getText().isEmpty() && !txtemcliente4.getText().isEmpty()) {
+                        String nombre = txtnombrecli4.getText();
+                        int edad = Integer.parseInt(txtedadcli4.getText());
+                        String dni = txtdnicli4.getText();
+                        String email = txtemcliente4.getText();
+                        String localidad = txtlocalidadcli4.getText();
+                        String nacionalidad = txtnacionalidadcli4.getText();
+                        // Actualiza los datos del cliente
+                        c.setDni(dni);
+                        c.setEdad(edad);
+                        c.setEmail(email);
+                        c.setLocalidad(localidad);
+                        c.setNacionalidad(nacionalidad);
+                        c.setNombre(nombre);
+                        try {
+                            this.ctrl.editarCliente(c); // Guarda los cambios
+                        } catch (Exception ex) {
+                            // Maneja excepciones
                         }
                     }
                 }
-            } else {
-                if (this.bandera.equals("eliminar")) {
-                    int id = 0;
-                    if (tblclientes.getSelectedRow() > -1 && tblclientes.getSelectedRowCount() == 1) {
-                        String dni = (String) tblclientes.getValueAt(tblclientes.getSelectedRow(), 3);
-                        Cliente clienteseleccionado = this.ctrl.obtenerClientePorDni(dni);
-                        List<Mascota> m = this.ctrl.listaMascotas(clienteseleccionado.getId_cliente());
-                        
-                        if (m != null) {
-                            try {
-                                ctrl.eliminarListaMascPorC(clienteseleccionado.getId_cliente());
-                            } catch (NonexistentEntityException ex) {
-                                JOptionPane.showMessageDialog(null, ex.getMessage());
-                            }
-                        }
-                        if (clienteseleccionado != null) {
-                            id = clienteseleccionado.getId_cliente();
-                            try {
-                                ctrl.eliminarClientePorId(clienteseleccionado.getId_cliente());
-                                
-                            } catch (Exception ex) {
-                                JOptionPane.showMessageDialog(null, ex.getMessage());
-                            }
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Debe buscar un cliente a eliminar y seleccionar");
+            }
+        } else if (this.bandera.equals("eliminar")) { // Verifica si la bandera indica que se debe eliminar un cliente
+            int id = 0;
+            if (tblclientes.getSelectedRow() > -1 && tblclientes.getSelectedRowCount() == 1) { // Verifica que haya una fila seleccionada en la tabla
+                String dni = (String) tblclientes.getValueAt(tblclientes.getSelectedRow(), 3);
+                Cliente clienteseleccionado = this.ctrl.obtenerClientePorDni(dni);
+                List<Mascota> m = this.ctrl.listaMascotas(clienteseleccionado.getId_cliente());
+
+                if (m != null) { // Si el cliente tiene mascotas, las elimina
+                    try {
+                        ctrl.eliminarListaMascPorC(clienteseleccionado.getId_cliente());
+                    } catch (NonexistentEntityException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage());
                     }
                 }
+                if (clienteseleccionado != null) { // Si el cliente existe, lo elimina
+                    id = clienteseleccionado.getId_cliente();
+                    try {
+                        ctrl.eliminarClientePorId(clienteseleccionado.getId_cliente());
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage());
+                    }
+                }
+            } else { // Si no hay un cliente seleccionado, muestra un mensaje
+                JOptionPane.showMessageDialog(null, "Debe buscar un cliente a eliminar y seleccionar");
             }
         }
+
+// Limpia el modelo de la tabla y los campos de entrada
         DefaultTableModel modelo = (DefaultTableModel) tblclientes.getModel();
         modelo.setRowCount(0); // Esto limpia todas las filas del modelo actual
         this.limpiar();

@@ -19,7 +19,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmTipousu extends javax.swing.JFrame {
     Controladora ctrl = new Controladora();
-    String bandera="";
+    String bandera = "";
+
     public FrmTipousu() {
         initComponents();
         setLocationRelativeTo(this);
@@ -212,85 +213,92 @@ public class FrmTipousu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-public void CargarTablaTipoUsuario() {
-    DefaultTableModel tabla = new DefaultTableModel();
-    String cabecera[] = {"Id", "Tipo"};
-    tabla.setColumnIdentifiers(cabecera);
+    public void CargarTablaTipoUsuario() {
+        DefaultTableModel tabla = new DefaultTableModel();
+        String cabecera[] = {"Id", "Tipo"};
+        tabla.setColumnIdentifiers(cabecera);
 
-    List<TipoUsuario> listaTipos = ctrl.listaTiposUsuario();
-    for (TipoUsuario tipo : listaTipos) {
-        Object fila[] = new Object[tabla.getColumnCount()];
-        fila[0] = tipo.getId_Tipo();
-        fila[1] = tipo.getNombre();
-        tabla.addRow(fila);
+        List<TipoUsuario> listaTipos = ctrl.listaTiposUsuario();
+        for (TipoUsuario tipo : listaTipos) {
+            Object fila[] = new Object[tabla.getColumnCount()];
+            fila[0] = tipo.getId_Tipo();
+            fila[1] = tipo.getNombre();
+            tabla.addRow(fila);
+        }
+
+        tblTipo.setModel(tabla);
     }
-
-    tblTipo.setModel(tabla);
-}
 
 // Método para limpiar la tabla
-public void limpiarTablaTipoUsuario() {
-    DefaultTableModel modelo = (DefaultTableModel) tblTipo.getModel();
-    modelo.setRowCount(0);
-}
+    public void limpiarTablaTipoUsuario() {
+        DefaultTableModel modelo = (DefaultTableModel) tblTipo.getModel();
+        modelo.setRowCount(0);
+    }
 
 // Método para limpiar los campos de texto
-public void limpiarCamposTipoUsuario() {
-    txtTipo.setText("");
-}
+    public void limpiarCamposTipoUsuario() {
+        txtTipo.setText("");
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-     if (this.bandera.equals("nuevo")) {
-        if (!txtTipo.getText().isEmpty()) {
-            TipoUsuario tipoExistente = ctrl.buscarTipoUsuarioPorTipo(txtTipo.getText());
-            if (tipoExistente != null) {
-                JOptionPane.showMessageDialog(null, "Tipo de Usuario existente");
-            } else {
-                String tipo = txtTipo.getText();
-                ctrl.guardarTipo(tipo);
-                JOptionPane.showMessageDialog(null, "Se creó un tipo de usuario correctamente");
-            }
-        }
-    } else if (this.bandera.equals("editar")) {
-        if (tblTipo.getSelectedRow() > -1 && tblTipo.getSelectedRowCount() == 1) {
-            int id = (int) tblTipo.getValueAt(tblTipo.getSelectedRow(), 0);
-            TipoUsuario tipoUsuario = ctrl.buscarTipoUsuarioPorId(id);
-            if (tipoUsuario != null) {
-                if (!txtTipo.getText().isEmpty()) {
+        if (this.bandera.equals("nuevo")) { // Verifica si la bandera indica que se debe crear un nuevo tipo de usuario
+            if (!txtTipo.getText().isEmpty()) { // Verifica que el campo de texto no esté vacío
+                // Busca si el tipo de usuario ya existe
+                TipoUsuario tipoExistente = ctrl.buscarTipoUsuarioPorTipo(txtTipo.getText());
+                if (tipoExistente != null) { // Si el tipo de usuario ya existe, muestra un mensaje de advertencia
+                    JOptionPane.showMessageDialog(null, "Tipo de Usuario existente");
+                } else {
+                    // Si no existe, obtiene el tipo de usuario del campo de texto y lo guarda
                     String tipo = txtTipo.getText();
-                    tipoUsuario.setNombre(tipo);
-                    try {
-                        ctrl.editarTipoUsuario(tipoUsuario);
-                        JOptionPane.showMessageDialog(null, "Se editó el tipo de usuario correctamente");
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "No Se editó el tipo de usuario correctamente");
-                    }
-                    
+                    ctrl.guardarTipo(tipo);
+                    JOptionPane.showMessageDialog(null, "Se creó un tipo de usuario correctamente");
                 }
             }
-        }
-    } else if (this.bandera.equals("eliminar")) {
-        if (tblTipo.getSelectedRow() > -1 && tblTipo.getSelectedRowCount() == 1) {
-            int id = (int) tblTipo.getValueAt(tblTipo.getSelectedRow(), 0);
-            try {
-                ctrl.eliminarTipoUsuarioPorId(id);
-                JOptionPane.showMessageDialog(null, "Se eliminó el tipo de usuario correctamente");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage());
+        } else if (this.bandera.equals("editar")) { // Verifica si la bandera indica que se debe editar un tipo de usuario
+            // Verifica que haya una fila seleccionada en la tabla de tipos de usuario
+            if (tblTipo.getSelectedRow() > -1 && tblTipo.getSelectedRowCount() == 1) {
+                // Obtiene el ID del tipo de usuario seleccionado
+                int id = (int) tblTipo.getValueAt(tblTipo.getSelectedRow(), 0);
+                // Busca el tipo de usuario por su ID
+                TipoUsuario tipoUsuario = ctrl.buscarTipoUsuarioPorId(id);
+                if (tipoUsuario != null) { // Si el tipo de usuario existe
+                    if (!txtTipo.getText().isEmpty()) { // Verifica que el campo de texto no esté vacío
+                        // Actualiza el nombre del tipo de usuario con el valor del campo de texto
+                        String tipo = txtTipo.getText();
+                        tipoUsuario.setNombre(tipo);
+                        try {
+                            // Edita el tipo de usuario en la base de datos
+                            ctrl.editarTipoUsuario(tipoUsuario);
+                            JOptionPane.showMessageDialog(null, "Se editó el tipo de usuario correctamente");
+                        } catch (Exception ex) {
+                            // Maneja cualquier excepción que ocurra durante la edición
+                            JOptionPane.showMessageDialog(null, "No se editó el tipo de usuario correctamente");
+                        }
+                    }
+                }
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de usuario para eliminar");
+        } else if (this.bandera.equals("eliminar")) { // Verifica si la bandera indica que se debe eliminar un tipo de usuario
+            // Verifica que haya una fila seleccionada en la tabla de tipos de usuario
+            if (tblTipo.getSelectedRow() > -1 && tblTipo.getSelectedRowCount() == 1) {
+                // Obtiene el ID del tipo de usuario seleccionado
+                int id = (int) tblTipo.getValueAt(tblTipo.getSelectedRow(), 0);
+                try {
+                    // Elimina el tipo de usuario por su ID
+                    ctrl.eliminarTipoUsuarioPorId(id);
+                    JOptionPane.showMessageDialog(null, "Se eliminó el tipo de usuario correctamente");
+                } catch (Exception ex) {
+                    // Maneja cualquier excepción que ocurra durante la eliminación
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+            } else {
+                // Muestra un mensaje indicando que se debe seleccionar un tipo de usuario para eliminar
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de usuario para eliminar");
+            }
         }
-    }
-    limpiarTablaTipoUsuario();
-    CargarTablaTipoUsuario();
-    limpiarCamposTipoUsuario();
-        /*if (!txtTipo.getText().isEmpty()) {
-            String nombre = txtTipo.getText();
-            //Cliente cli = new Cliente(1,nombre,edad,email,dni,localidad,nacionalidad);
-            ctrl.guardarTipo(nombre);
-            JOptionPane.showMessageDialog(null, "Se creo un Tipo Usuario");
+// Limpia y recarga la tabla de tipos de usuario, y limpia los campos de texto
+        limpiarTablaTipoUsuario();
+        CargarTablaTipoUsuario();
+        limpiarCamposTipoUsuario();
 
-        }*/
     }//GEN-LAST:event_jButton2ActionPerformed
     public void CargarT(List<TipoUsuario> tipos) {
         DefaultTableModel tabla = new DefaultTableModel();

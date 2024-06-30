@@ -237,63 +237,72 @@ Controladora ctrl=new Controladora();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-public void CargarT(List<Articulo> art){
-    DefaultTableModel tabla=new DefaultTableModel();
-    String cabecera[] = {"Id","Nombre","Precio Actual","Stock"};
-    tabla.setColumnIdentifiers(cabecera);
-    Object fila[]=new Object[tabla.getColumnCount()];
-    if(art!=null){
-       for(Articulo c : art){
-           fila[0]=c.getId();
-            fila[1]=c.getNombre();
-            fila[2]=c.getPrecioActual();
-          fila[3]=c.getStockActual();
-            
-            tabla.addRow(fila);
-       }
-           
-        tblusuarios.setModel(tabla);
+public void CargarT(List<Articulo> art) {
+        DefaultTableModel tabla = new DefaultTableModel();
+        String cabecera[] = {"Id", "Nombre", "Precio Actual", "Stock"};
+        tabla.setColumnIdentifiers(cabecera);
+        Object fila[] = new Object[tabla.getColumnCount()];
+        if (art != null) {
+            for (Articulo c : art) {
+                fila[0] = c.getId();
+                fila[1] = c.getNombre();
+                fila[2] = c.getPrecioActual();
+                fila[3] = c.getStockActual();
+
+                tabla.addRow(fila);
+            }
+
+            tblusuarios.setModel(tabla);
+        }
     }
- }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         List<Articulo> m = ctrl.listaArticulo();
+        List<Articulo> m = ctrl.listaArticulo();
         if (m == null) {
             JOptionPane.showMessageDialog(null, "Vacio");
         } else {
             this.CargarT(m);
-           
+
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        FrmPrincipal frm=new FrmPrincipal();
+        FrmPrincipal frm = new FrmPrincipal();
         frm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-       if(this.bandera.equals("editar")){
-        String nombre = txtnom.getText();
-        int stock = Integer.parseInt(txtstock1.getText());
-        double precio = Double.parseDouble(txtprecio.getText());
-        
-        if (this.bandera.equals("editar")) {
-            if (tblusuarios.getSelectedRow() > -1 && tblusuarios.getSelectedRowCount() == 1) {
-                int seleccionado = (int) tblusuarios.getValueAt(tblusuarios.getSelectedRow(), 0);
-                Articulo u = ctrl.buscarArtxId(seleccionado);
-                u.setNombre(nombre);
-                u.setStockActual(stock);
-                u.setPrecioActual(precio);
-                try {
-                    ctrl.editarArt(u);
-                } catch (Exception ex) {
-                    Logger.getLogger(FrmUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        if (this.bandera.equals("editar")) { // Verifica si la bandera indica que se debe editar un artículo
+            // Obtiene los valores de los campos de texto
+            String nombre = txtnom.getText();
+            int stock = Integer.parseInt(txtstock1.getText());
+            double precio = Double.parseDouble(txtprecio.getText());
+
+            // Verifica nuevamente si la bandera indica que se debe editar
+            if (this.bandera.equals("editar")) {
+                // Verifica que haya una fila seleccionada en la tabla de usuarios
+                if (tblusuarios.getSelectedRow() > -1 && tblusuarios.getSelectedRowCount() == 1) {
+                    // Obtiene el ID del artículo seleccionado
+                    int seleccionado = (int) tblusuarios.getValueAt(tblusuarios.getSelectedRow(), 0);
+                    // Busca el artículo por su ID
+                    Articulo u = ctrl.buscarArtxId(seleccionado);
+                    // Actualiza los datos del artículo con los valores obtenidos de los campos de texto
+                    u.setNombre(nombre);
+                    u.setStockActual(stock);
+                    u.setPrecioActual(precio);
+                    try {
+                        // Edita el artículo en la base de datos
+                        ctrl.editarArt(u);
+                    } catch (Exception ex) {
+                        // Maneja cualquier excepción que ocurra durante la edición
+                        Logger.getLogger(FrmUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
+        } else {
+            // Muestra un mensaje indicando que se debe seleccionar el botón de editar
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el botón de editar");
         }
-       }else{
-       JOptionPane.showMessageDialog(null, "debe seleccionar boton editar");
-       }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void tblusuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblusuariosMouseClicked

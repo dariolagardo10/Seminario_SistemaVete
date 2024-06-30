@@ -26,211 +26,252 @@ import javax.swing.JOptionPane;
  */
 public class ControladoraPersistencia {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("VeterinariaPU");
-    ClienteJpaController clienteJpa = new ClienteJpaController();
-    MascotaJpaController mascoJpa = new MascotaJpaController();
-    TipoUsuarioJpaController tipoJpa = new TipoUsuarioJpaController();
-    UsuarioJpaController usuJpa = new UsuarioJpaController();
-    CitaJpaController citaJpa = new CitaJpaController();
-    HistoriaClinicaJpaController HistoriaCJpa = new HistoriaClinicaJpaController();
-    InventarioJpaController InventarioCJpa = new InventarioJpaController();
-    ArticuloJpaController articuloJpa = new ArticuloJpaController();
-    
-    public void guardar(Cliente cliente) {
-        clienteJpa.create(cliente);
-    }
+private EntityManagerFactory emf = Persistence.createEntityManagerFactory("VeterinariaPU");
+ClienteJpaController clienteJpa = new ClienteJpaController();
+MascotaJpaController mascoJpa = new MascotaJpaController();
+TipoUsuarioJpaController tipoJpa = new TipoUsuarioJpaController();
+UsuarioJpaController usuJpa = new UsuarioJpaController();
+CitaJpaController citaJpa = new CitaJpaController();
+HistoriaClinicaJpaController HistoriaCJpa = new HistoriaClinicaJpaController();
+InventarioJpaController InventarioCJpa = new InventarioJpaController();
+ArticuloJpaController articuloJpa = new ArticuloJpaController();
 
-    public void guardarMascota(Mascota m) {
-        mascoJpa.create(m);
-    }
+// Guarda un nuevo cliente
+public void guardar(Cliente cliente) {
+    clienteJpa.create(cliente);
+}
 
-    public Cliente buscarCliente(String dni) {
-        return clienteJpa.findClienteByDni(dni);
-    }
+// Guarda una nueva mascota
+public void guardarMascota(Mascota m) {
+    mascoJpa.create(m);
+}
 
-    public List<Cliente> traerClientes() {
-        List<Cliente> clientes = clienteJpa.findClienteEntities();
-        return clientes;
-    }
+// Busca un cliente por su DNI
+public Cliente buscarCliente(String dni) {
+    return clienteJpa.findClienteByDni(dni);
+}
 
-    public List<Mascota> traerMascotasPorNom(String nombre) {
-        List<Mascota> m = mascoJpa.findMascotasPorNombre(nombre);
-        return m;
-    }
+// Trae todos los clientes
+public List<Cliente> traerClientes() {
+    return clienteJpa.findClienteEntities();
+}
 
-    public List<Mascota> traerMascotas() {
-        List<Mascota> m = mascoJpa.findMascotaEntities();
-        return m;
-    }
+// Trae las mascotas por su nombre
+public List<Mascota> traerMascotasPorNom(String nombre) {
+    return mascoJpa.findMascotasPorNombre(nombre);
+}
 
-    public void eliminarCliente(String dni) throws NonexistentEntityException {
-        this.clienteJpa.destroy(dni);
-    }
+// Trae todas las mascotas
+public List<Mascota> traerMascotas() {
+    return mascoJpa.findMascotaEntities();
+}
 
-    public List<Mascota> traerMascotasPorIdCli(int id) {
-        return this.mascoJpa.findMascotaEntities(id);
-    }
+// Elimina un cliente por su DNI
+public void eliminarCliente(String dni) throws NonexistentEntityException {
+    this.clienteJpa.destroy(dni);
+}
 
-    public void eliminarListaMascPorIdCli(int id) throws NonexistentEntityException {
-        this.mascoJpa.destroyByClienteId(id);
-    }
+// Trae las mascotas por el ID del cliente
+public List<Mascota> traerMascotasPorIdCli(int id) {
+    return this.mascoJpa.findMascotaEntities(id);
+}
 
-    public void eliminarClientePorId(int id) {
-        try {
-            this.clienteJpa.destroy(id);
-        } catch (NonexistentEntityException ex) {
-            JOptionPane.showMessageDialog(null, "El cliente con id " + id + " no existe.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+// Elimina todas las mascotas por el ID del cliente
+public void eliminarListaMascPorIdCli(int id) throws NonexistentEntityException {
+    this.mascoJpa.destroyByClienteId(id);
+}
 
-    public void eliminarMascota(int id) {
-        try {
-            this.mascoJpa.destroy(id);
-            JOptionPane.showMessageDialog(null, "Mascota Eliminada");
-        } catch (NonexistentEntityException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
+// Elimina un cliente por su ID
+public void eliminarClientePorId(int id) {
+    try {
+        this.clienteJpa.destroy(id);
+    } catch (NonexistentEntityException ex) {
+        JOptionPane.showMessageDialog(null, "El cliente con id " + id + " no existe.", "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
 
-    public void crearTipo(TipoUsuario tipo) {
-        this.tipoJpa.create(tipo);
+// Elimina una mascota por su ID
+public void eliminarMascota(int id) {
+    try {
+        this.mascoJpa.destroy(id);
+        JOptionPane.showMessageDialog(null, "Mascota Eliminada");
+    } catch (NonexistentEntityException ex) {
+        JOptionPane.showMessageDialog(null, ex.getMessage());
     }
+}
 
-    public List<TipoUsuario> TraerTipo() {
-        return tipoJpa.findTipoUsuarioEntities();
-    }
+// Crea un nuevo tipo de usuario
+public void crearTipo(TipoUsuario tipo) {
+    this.tipoJpa.create(tipo);
+}
 
-    public TipoUsuario buscarTipoxNOM(String tipo) {
-        return tipoJpa.findTipoUsuarioByNombre(tipo);
-    }
+// Trae todos los tipos de usuario
+public List<TipoUsuario> TraerTipo() {
+    return tipoJpa.findTipoUsuarioEntities();
+}
 
-    public void guardarUsuario(Usuario usu) {
-        usuJpa.create(usu);
-        JOptionPane.showMessageDialog(null, "Usuario Creado");
-    }
+// Busca un tipo de usuario por su nombre
+public TipoUsuario buscarTipoxNOM(String tipo) {
+    return tipoJpa.findTipoUsuarioByNombre(tipo);
+}
 
-    public Usuario buscarUsuario(String text) {
-        return usuJpa.findUsuarioByNombre(text);
-    }
+// Guarda un nuevo usuario
+public void guardarUsuario(Usuario usu) {
+    usuJpa.create(usu);
+    JOptionPane.showMessageDialog(null, "Usuario Creado");
+}
 
-    public void editarUsu(Usuario u) throws Exception {
-        usuJpa.edit(u);
-        JOptionPane.showMessageDialog(null, "Usuario editado");
-    }
+// Busca un usuario por su nombre de usuario
+public Usuario buscarUsuario(String text) {
+    return usuJpa.findUsuarioByNombre(text);
+}
 
-    public List<Usuario> TraerUsuarios() {
-        return usuJpa.findUsuarioEntities();
-    }
+// Edita un usuario existente
+public void editarUsu(Usuario u) throws Exception {
+    usuJpa.edit(u);
+    JOptionPane.showMessageDialog(null, "Usuario editado");
+}
 
-    public void editarCliente(Cliente cliente) throws Exception {
-       clienteJpa.edit(cliente);
-    }
+// Trae todos los usuarios
+public List<Usuario> TraerUsuarios() {
+    return usuJpa.findUsuarioEntities();
+}
 
-    public Mascota traerMascota(int id) {
-        return mascoJpa.findMascota(id);
-    }
+// Edita un cliente existente
+public void editarCliente(Cliente cliente) throws Exception {
+   clienteJpa.edit(cliente);
+}
 
-    public void crearCitas(Cita c) {
-       this.citaJpa.create(c);
-      
-    }
+// Trae una mascota por su ID
+public Mascota traerMascota(int id) {
+    return mascoJpa.findMascota(id);
+}
 
-    public void crearHistC(HistoriaClinica h) {
-        this.HistoriaCJpa.create(h);
-    }
+// Crea una nueva cita
+public void crearCitas(Cita c) {
+   this.citaJpa.create(c);
+}
 
-    public void crearArticulo(Articulo a) {
-        this.articuloJpa.create(a);
-    }
+// Crea una nueva historia clínica
+public void crearHistC(HistoriaClinica h) {
+    this.HistoriaCJpa.create(h);
+}
 
-    public List<Articulo> traerArticulos() {
-        return this.articuloJpa.findArticuloEntities();
-    }
+// Crea un nuevo artículo
+public void crearArticulo(Articulo a) {
+    this.articuloJpa.create(a);
+}
 
-    public Usuario buscarUsuarioxId(int seleccionado) {
-        return this.usuJpa.findUsuario(seleccionado);
-    }
+// Trae todos los artículos
+public List<Articulo> traerArticulos() {
+    return this.articuloJpa.findArticuloEntities();
+}
 
-    public Articulo traerArticuloxId(int seleccionado) {
-        return this.articuloJpa.findArticulo(seleccionado);
-    }
+// Busca un usuario por su ID
+public Usuario buscarUsuarioxId(int seleccionado) {
+    return this.usuJpa.findUsuario(seleccionado);
+}
 
-    public void editarArticulo(Articulo a) {
-        try {
-            this.articuloJpa.edit(a);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-    }
+// Trae un artículo por su ID
+public Articulo traerArticuloxId(int seleccionado) {
+    return this.articuloJpa.findArticulo(seleccionado);
+}
 
-    public void eliminarArt(Articulo u) {
-        try {
-            this.articuloJpa.destroy(u.getId());
-        } catch (NonexistentEntityException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
+// Edita un artículo existente
+public void editarArticulo(Articulo a) {
+    try {
+        this.articuloJpa.edit(a);
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, ex.getMessage());
     }
+}
 
-    public Articulo traerArticuloxNom(String text) {
-        return this.articuloJpa.findArticuloByName(text);
+// Elimina un artículo
+public void eliminarArt(Articulo u) {
+    try {
+        this.articuloJpa.destroy(u.getId());
+    } catch (NonexistentEntityException ex) {
+        JOptionPane.showMessageDialog(null, ex.getMessage());
     }
+}
 
-    public void editarTipoUsu(TipoUsuario tipoUsuario) throws Exception {
-        this.tipoJpa.edit(tipoUsuario);
-    }
+// Busca un artículo por su nombre
+public Articulo traerArticuloxNom(String text) {
+    return this.articuloJpa.findArticuloByName(text);
+}
 
-    public void eliminarTipo(int id) throws NonexistentEntityException {
-        this.tipoJpa.destroy(id);
-    }
+// Edita un tipo de usuario existente
+public void editarTipoUsu(TipoUsuario tipoUsuario) throws Exception {
+    this.tipoJpa.edit(tipoUsuario);
+}
 
-    public void eliminarUsu(int id_Usu) throws NonexistentEntityException {
-        this.usuJpa.destroy(id_Usu);
-    }
+// Elimina un tipo de usuario por su ID
+public void eliminarTipo(int id) throws NonexistentEntityException {
+    this.tipoJpa.destroy(id);
+}
 
-    public void editarM(Mascota mascotaSeleccionada) throws Exception {
-        this.mascoJpa.edit(mascotaSeleccionada);
-    }
+// Elimina un usuario por su ID
+public void eliminarUsu(int id_Usu) throws NonexistentEntityException {
+    this.usuJpa.destroy(id_Usu);
+}
 
-    public Cita buscarCita(Mascota m, Date fechaSeleccionada) {
-        return this.citaJpa.buscarCita(m,fechaSeleccionada);
-    }
+// Edita una mascota existente
+public void editarM(Mascota mascotaSeleccionada) throws Exception {
+    this.mascoJpa.edit(mascotaSeleccionada);
+}
 
+// Busca una cita por mascota y fecha
+public Cita buscarCita(Mascota m, Date fechaSeleccionada) {
+    return this.citaJpa.buscarCita(m,fechaSeleccionada);
+}
 
-    public void eliminarCita1(int id) throws NonexistentEntityException {
-        this.citaJpa.destroy(id);
-    }
+// Elimina una cita por su ID
+public void eliminarCita1(int id) throws NonexistentEntityException {
+    this.citaJpa.destroy(id);
+}
 
-    public Cita traerCita(Mascota m, Date fechaSeleccionada) {
-        return this.citaJpa.buscarCita(m, fechaSeleccionada);
-    }
+// Trae una cita por mascota y fecha
+public Cita traerCita(Mascota m, Date fechaSeleccionada) {
+    return this.citaJpa.buscarCita(m, fechaSeleccionada);
+}
 
-    public void editarCita(Cita citaExistente) throws Exception {
-        this.citaJpa.edit(citaExistente);
-    }
+// Edita una cita existente
+public void editarCita(Cita citaExistente) throws Exception {
+    this.citaJpa.edit(citaExistente);
+}
 
-    public List<Cita> traerCita2(List<Mascota> m) {
-        return this.citaJpa.buscarCitaPorMascotas(m);
-    }
+// Trae las citas por una lista de mascotas
+public List<Cita> traerCita2(List<Mascota> m) {
+    return this.citaJpa.buscarCitaPorMascotas(m);
+}
 
-    public HistoriaClinica buscarHistoriaClinicaPorMascotaYFecha(Mascota m, Date fecha) {
-        return this.HistoriaCJpa.buscarHistoriaClinicaPorMascotaYFecha(m,fecha);
-    }
-    public void crearHistoriaClinica(HistoriaClinica historia) {
-        this.HistoriaCJpa.crearHistoriaClinica(historia);
-    }
-    public void actualizarHistoriaClinica(HistoriaClinica historia) {
-        this.HistoriaCJpa.actualizarHistoriaClinica(historia);
-    }
+// Busca una historia clínica por mascota y fecha
+public HistoriaClinica buscarHistoriaClinicaPorMascotaYFecha(Mascota m, Date fecha) {
+    return this.HistoriaCJpa.buscarHistoriaClinicaPorMascotaYFecha(m,fecha);
+}
 
-    public void eliminarHistoriaClinica(HistoriaClinica historia) {
-        this.HistoriaCJpa.eliminarHistoriaClinica(historia);
-    }
+// Crea una nueva historia clínica
+public void crearHistoriaClinica(HistoriaClinica historia) {
+    this.HistoriaCJpa.crearHistoriaClinica(historia);
+}
 
-    public List<HistoriaClinica> traerlistaH(String text) {
-        return this.HistoriaCJpa.traerHistoriasClinicasPorNombreMascota(text);
-    }
+// Actualiza una historia clínica existente
+public void actualizarHistoriaClinica(HistoriaClinica historia) {
+    this.HistoriaCJpa.actualizarHistoriaClinica(historia);
+}
 
-    public List<HistoriaClinica> traerlistaH2() {
-        return this.HistoriaCJpa.findHistoriaClinicaEntities();
-    }
+// Elimina una historia clínica existente
+public void eliminarHistoriaClinica(HistoriaClinica historia) {
+    this.HistoriaCJpa.eliminarHistoriaClinica(historia);
+}
+
+// Trae una lista de historias clínicas por nombre de mascota
+public List<HistoriaClinica> traerlistaH(String text) {
+    return this.HistoriaCJpa.traerHistoriasClinicasPorNombreMascota(text);
+}
+
+// Trae todas las historias clínicas
+public List<HistoriaClinica> traerlistaH2() {
+    return this.HistoriaCJpa.findHistoriaClinicaEntities();
+}
 }
